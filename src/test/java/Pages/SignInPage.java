@@ -49,6 +49,6 @@ public class SignInPage extends BasePage
     {
         click(BikeLightAddToCartButton);
         click(CartButton);
-        AssertionHelper.assertElementTextEquals(InventoryItem,"Sauce Labs Bi Light" , test);
+        AssertionHelper.assertElementTextEquals(InventoryItem,"Sauce Labs Bike Light" , test);
     }
 }
