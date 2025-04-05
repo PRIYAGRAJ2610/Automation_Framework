@@ -36,6 +36,7 @@ public class WebDriverBase {
                     chromeOptions.addArguments("--window-size=1920,1080");
                 }
                 chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--disable-popup-blocking");
                 chromeOptions.addArguments("--disable-password-leak-detection");
                 driver = new ChromeDriver(chromeOptions);
                 break;
