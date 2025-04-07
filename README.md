@@ -38,7 +38,7 @@ Automation_Framework/
 ├── pom.xml                          # Maven configuration
 ├── .gitignore                       # Git ignore file
 
-
+daily build trends and reports with allure on jenkins for monitoring :
 ![image](https://github.com/user-attachments/assets/caca3529-15df-464c-9996-3475f4759763)
 
 
