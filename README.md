@@ -37,3 +37,10 @@ Automation_Framework/
 │   └── test-output/                 # Extent Reports output
 ├── pom.xml                          # Maven configuration
 ├── .gitignore                       # Git ignore file
+
+
+![image](https://github.com/user-attachments/assets/caca3529-15df-464c-9996-3475f4759763)
+
+
+![image](https://github.com/user-attachments/assets/1c96f50e-af4f-48e5-a04d-2905e1431249)
+
