@@ -1,6 +1,7 @@
 package Pages;
 
 import Base.BasePage;
+import Data.Constant;
 import Helper.AssertionHelper;
 import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
@@ -32,23 +33,25 @@ public class SignInPage extends BasePage
     @FindBy(xpath = "//div[@class='inventory_item_name']")
     private WebElement InventoryItem;
 
-    public SignInPage(WebDriver driver, ExtentTest test) {
-        super(driver, test);
+    public SignInPage(WebDriver driver) {
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 
     public void LoginToSauceDemo()
     {
-
-        enterText(UsernameInput,"standard_user");
-        enterText(PasswordInput,"secret_sauce");
+        AssertionHelper.assertElementVisible(UsernameInput);
+        enterText(UsernameInput, Constant.LoginConstant.STANDARD_USERNAME);
+        enterText(PasswordInput, Constant.LoginConstant.STANDARD_PASSWORD);
         click(LoginButton);
     }
 
     public void AddToCartAndValidateCartItem()
     {
+        AssertionHelper.assertElementVisible(BikeLightAddToCartButton);
         click(BikeLightAddToCartButton);
+        AssertionHelper.assertElementVisible(CartButton);
         click(CartButton);
-        AssertionHelper.assertElementTextEquals(InventoryItem,"Sauce Labs Bike Light" , test);
+        AssertionHelper.assertElementTextEquals(InventoryItem,Constant.LoginConstant.SauceLabsBikeLight);
     }
 }

@@ -3,6 +3,7 @@ package Base;
 import Helper.LoggerHelper;
 import Helper.ScreenshotHelper;
 import Pages.SignInPage;
+import SetUp.ConfigReader;
 import SetUp.WebDriverBase;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -44,10 +45,12 @@ public class BaseTest {
         log.info("Starting Test: " + method.getName());
         driver = WebDriverBase.getWebDriver();
         driver.manage().window().maximize();
-        driver.get("https://www.saucedemo.com/");
+        driver.get(ConfigReader.getProperty("url"));
 
         test = extent.createTest(method.getName());
-        signInPage = new SignInPage(driver, test);
+        LoggerHelper.setExtentTest(test); // Set it in ThreadLocal
+
+        signInPage = new SignInPage(driver); // No need to pass test anymore
 
         log.info("Navigated to Test Page");
     }
@@ -57,13 +60,12 @@ public class BaseTest {
         String screenshotBase64 = ScreenshotHelper.captureScreenshotAsBase64(driver);
         if (result.getStatus() == ITestResult.FAILURE) {
             log.error("Test Failed: " + result.getName());
-            test.fail("Test Failed").addScreenCaptureFromBase64String(screenshotBase64);
+            LoggerHelper.getExtentTest().fail("Test Failed").addScreenCaptureFromBase64String(screenshotBase64);
         } else if (result.getStatus() == ITestResult.SUCCESS) {
             log.info("Test Passed: " + result.getName());
-            test.pass("Test Passed").addScreenCaptureFromBase64String(screenshotBase64);
+            LoggerHelper.getExtentTest().pass("Test Passed").addScreenCaptureFromBase64String(screenshotBase64);
         }
         WebDriverBase.quitWebDriver();
-        extent.flush();
     }
 
     @AfterSuite
