@@ -5,36 +5,36 @@ import org.testng.Assert;
 
 public class AssertionHelper {
 
-    public static void assertElementVisible(WebElement element) {
+    public static void assertElementVisible(WebElement element , String elementName) {
         try {
             Assert.assertTrue(element.isDisplayed(), "Element is not visible.");
-            LoggerHelper.logInfo("Element is visible: " + element.toString());
+            LoggerHelper.logInfo("Element is visible: " + elementName);
         } catch (AssertionError e) {
-            LoggerHelper.logError("Element is not visible: " + element.toString(), e);
+            LoggerHelper.logError("Element is not visible: " + elementName, e);
             throw e;
         }
     }
 
-    public static boolean EnterText(WebElement element, String text) {
+    public static boolean EnterText(WebElement element, String elementName,String text) {
         try {
             element.clear();
             element.sendKeys(text);
             boolean result = text.equals(element.getAttribute("value"));
-            LoggerHelper.logInfo("Entered text in element: " + element.toString() + " | Value: " + text);
+            LoggerHelper.logInfo("Entered text in element: " + elementName + " | Value: " + text);
             return result;
         } catch (Exception e) {
-            LoggerHelper.logError("Failed to send keys to element: " + element.toString(), e);
+            LoggerHelper.logError("Failed to send keys to element: " + elementName, e);
             return false;
         }
     }
 
-    public static boolean validateClick(WebElement element) {
+    public static boolean validateClick(WebElement element , String elementName) {
         try {
             element.click();
-            LoggerHelper.logInfo("Clicked on element: " + element.toString());
+            LoggerHelper.logInfo("Clicked on element: " + elementName);
             return true;
         } catch (Exception e) {
-            LoggerHelper.logError("Failed to click element: " + element.toString(), e);
+            LoggerHelper.logError("Failed to click element: " + elementName, e);
             return false;
         }
     }
@@ -50,22 +50,22 @@ public class AssertionHelper {
         }
     }
 
-    public static void assertElementEnabled(WebElement element) {
+    public static void assertElementEnabled(WebElement element , String elementName) {
         try {
             Assert.assertTrue(element.isEnabled(), "Element is not enabled.");
-            LoggerHelper.logInfo("Element is enabled: " + element.toString());
+            LoggerHelper.logInfo("Element is enabled: " + elementName);
         } catch (AssertionError e) {
-            LoggerHelper.logError("Element is not enabled: " + element.toString(), e);
+            LoggerHelper.logError("Element is not enabled: " + elementName, e);
             throw e;
         }
     }
 
-    public static void assertElementSelected(WebElement element) {
+    public static void assertElementSelected(WebElement element , String elementName ){
         try {
             Assert.assertTrue(element.isSelected(), "Element is not selected.");
-            LoggerHelper.logInfo("Element is selected: " + element.toString());
+            LoggerHelper.logInfo("Element is selected: " + elementName);
         } catch (AssertionError e) {
-            LoggerHelper.logError("Element is not selected: " + element.toString(), e);
+            LoggerHelper.logError("Element is not selected: " + elementName, e);
             throw e;
         }
     }

@@ -9,35 +9,49 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WebDriverBase {
     private static WebDriver driver;
 
     public static void initializeWebDriver() {
-        if (driver != null) {
-            return; // Prevent reinitialization if already set
-        }
+        if (driver != null) return;
 
-        // Read browser name from config file, default to "chrome"
         String browser = System.getProperty("browser", ConfigReader.getProperty("browser")).toLowerCase();
-
-        // Determine if running in a CI environment (e.g., Jenkins)
-        boolean isCIEnvironment = System.getenv("CI") != null || System.getenv("JENKINS_HOME") != null;
-        // Read headless property, default to "true" if in CI, "false" otherwise
-        String headlessProperty = System.getProperty("headless", isCIEnvironment ? "true" : "false");
-        boolean isHeadless = "true".equalsIgnoreCase(headlessProperty);
+        boolean isCI = System.getenv("CI") != null || System.getenv("JENKINS_HOME") != null;
+        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", isCI ? "true" : "false"));
 
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
+
                 if (isHeadless) {
-                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("--headless=new");
                     chromeOptions.addArguments("--disable-gpu");
                     chromeOptions.addArguments("--window-size=1920,1080");
                 }
+
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 chromeOptions.addArguments("--disable-popup-blocking");
                 chromeOptions.addArguments("--disable-password-leak-detection");
+                chromeOptions.addArguments("--disable-notifications");
+                chromeOptions.addArguments("--disable-extensions");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+                chromeOptions.addArguments("--incognito");
+
+                // Avoid automation detection
+                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
+
+                // Disable Chrome's credential service and password manager
+                Map<String, Object> chromePrefs = new HashMap<>();
+                chromePrefs.put("credentials_enable_service", false);
+                chromePrefs.put("profile.password_manager_enabled", false);
+                chromeOptions.setExperimentalOption("prefs", chromePrefs);
+
                 driver = new ChromeDriver(chromeOptions);
                 break;
 
@@ -69,10 +83,9 @@ public class WebDriverBase {
     }
 
     public static WebDriver getWebDriver() {
-        if (driver != null) {
-            return driver;
+        if (driver == null) {
+            initializeWebDriver();
         }
-        initializeWebDriver();
         return driver;
     }
 

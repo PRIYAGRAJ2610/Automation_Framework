@@ -3,6 +3,7 @@ package Pages;
 import Base.BasePage;
 import Data.Constant;
 import Helper.AssertionHelper;
+import Helper.WaitHelper;
 import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,9 @@ public class SignInPage extends BasePage
     private WebElement PasswordInput ;
     @FindBy(xpath = "//input[@id = 'login-button']")
     private WebElement LoginButton;
+
+    @FindBy(xpath = "//h3[contains(text(),'Username and password do not match any user')]")
+    private WebElement InvalidUserWarningBanner;
 
     @FindBy(xpath = "//button[@id='react-burger-menu-btn']")
     private WebElement LeftNavBarButton;
@@ -33,25 +37,42 @@ public class SignInPage extends BasePage
     @FindBy(xpath = "//div[@class='inventory_item_name']")
     private WebElement InventoryItem;
 
+
     public SignInPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public void LoginToSauceDemo()
+    public void LoginToSauceDemo(String user , String password)
     {
-        AssertionHelper.assertElementVisible(UsernameInput);
-        enterText(UsernameInput, Constant.LoginConstant.STANDARD_USERNAME);
-        enterText(PasswordInput, Constant.LoginConstant.STANDARD_PASSWORD);
-        click(LoginButton);
+        AssertionHelper.assertElementVisible(UsernameInput , "UsernameInput");
+        enterText(UsernameInput, "UsernameInput",user);
+        AssertionHelper.assertElementVisible(PasswordInput,"PasswordInput");
+        enterText(PasswordInput,"PasswordInput",password);
+        click(LoginButton,"LoginButton");
+    }
+
+    public void ValidateInvalidUserWarningBanner()
+    {
+        AssertionHelper.assertElementVisible(InvalidUserWarningBanner,"InvalidUserWarningBanner");
+    }
+
+    public void LogOut()
+    {
+        AssertionHelper.assertElementVisible(LeftNavBarButton,"LeftNavBarButton");
+        click(LeftNavBarButton,"LeftNavBarButton");
+        WaitHelper.waitForElementVisibility(LeftNavBarButton,10);
+        AssertionHelper.assertElementVisible(LogoutButton,"LogOutButton");
+        //(LogoutButton,"LogoutButton");
+        click(LogoutButton,"LogoutButton");
     }
 
     public void AddToCartAndValidateCartItem()
     {
-        AssertionHelper.assertElementVisible(BikeLightAddToCartButton);
-        click(BikeLightAddToCartButton);
-        AssertionHelper.assertElementVisible(CartButton);
-        click(CartButton);
+        AssertionHelper.assertElementVisible(BikeLightAddToCartButton,"BikeLightAddToCartButton");
+        click(BikeLightAddToCartButton,"BikeLightAddToCartButton");
+        AssertionHelper.assertElementVisible(CartButton,"CartButton");
+        click(CartButton,"CartButton");
         AssertionHelper.assertElementTextEquals(InventoryItem,Constant.LoginConstant.SauceLabsBikeLight);
     }
 }
