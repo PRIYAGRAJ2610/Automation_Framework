@@ -61,7 +61,7 @@ public class SignInPage extends BasePage
     {
         AssertionHelper.assertElementVisible(LeftNavBarButton,"LeftNavBarButton");
         click(LeftNavBarButton,"LeftNavBarButton");
-        WaitHelper.waitForElementVisibility(LeftNavBarButton,10);
+        WaitHelper.waitForElementVisibility(LeftNavBarButton,Constant.Timeout.LONG.getSeconds());
         AssertionHelper.assertElementVisible(LogoutButton,"LogOutButton");
         //(LogoutButton,"LogoutButton");
         click(LogoutButton,"LogoutButton");
