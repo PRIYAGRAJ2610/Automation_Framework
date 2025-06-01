@@ -1,11 +1,13 @@
 package Helper;
 
+import io.qameta.allure.Allure;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -20,6 +22,11 @@ public class ScreenshotHelper {
             FileHandler.createDir(new File(System.getProperty("user.dir") + "/screenshots"));
             FileHandler.copy(src, new File(screenshotPath));
             log.info("Screenshot captured: " + screenshotPath);
+
+            // Attach to Allure report as file
+            Allure.addAttachment(screenshotName, new ByteArrayInputStream(((TakesScreenshot) driver)
+                    .getScreenshotAs(OutputType.BYTES)));
+
         } catch (IOException e) {
             log.error("Failed to capture screenshot: " + e.getMessage());
         }
