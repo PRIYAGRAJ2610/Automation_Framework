@@ -6,6 +6,9 @@ public  class Constant {
         public static final String STANDARD_USERNAME = "standard_user";
         public static final String STANDARD_PASSWORD = "secret_sauce";
         public static final String SauceLabsBikeLight = "Sauce Labs Bike Light";
+
+        public static final String Problem_Username = "problem_user";
+
     }
 
     public class InvalidUser

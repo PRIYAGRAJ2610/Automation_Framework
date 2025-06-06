@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 public class SignInPage extends BasePage
 {
     @FindBy(xpath = "//input[@id = 'user-name']")
@@ -36,6 +38,15 @@ public class SignInPage extends BasePage
 
     @FindBy(xpath = "//div[@class='inventory_item_name']")
     private WebElement InventoryItem;
+
+    @FindBy(xpath = "//select[@class='product_sort_container']")
+    private WebElement SortDropdown;
+
+    @FindBy(xpath = "//button[text()='Add to cart']")
+    private List<WebElement>  AddToCartButton;
+
+    @FindBy(xpath = "//button[text()='Add to cart']/parent::div/preceding-sibling::div/a")
+    private List<WebElement> PartTitle;
 
 
     public SignInPage(WebDriver driver) {
@@ -74,5 +85,23 @@ public class SignInPage extends BasePage
         AssertionHelper.assertElementVisible(CartButton,"CartButton");
         click(CartButton,"CartButton");
         AssertionHelper.assertElementTextEquals(InventoryItem,Constant.LoginConstant.SauceLabsBikeLight);
+    }
+    public void SortProducts()
+    {
+        AssertionHelper.assertElementVisible(SortDropdown,"sort dropdown");
+        selectDropdown(SortDropdown,"Price (low to high)" , "SortDropdown");
+    }
+
+    public void PrintUnorderedParts()
+    {
+        for (WebElement w : AddToCartButton)
+        {
+            click(w,w.toString());
+        }
+        for (WebElement part: PartTitle)
+        {
+            String st = getText(part,part.toString());
+            System.out.println(st);
+        }
     }
 }

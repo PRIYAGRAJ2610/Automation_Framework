@@ -31,4 +31,14 @@ public class SignInTest extends BaseTest
         signInPage.AddToCartAndValidateCartItem();
         signInPage.LogOut();
     }
+
+
+    @Test(description = "User can successfully Login after entering valid Credentials. Author: Priyag Raj Sharma",
+            retryAnalyzer = RetryAnalyzer.class)
+    public void PrintPartsThatAreUnavailableToAddToCart()
+    {
+        signInPage.LoginToSauceDemo(LoginConstant.Problem_Username,LoginConstant.STANDARD_PASSWORD);
+        signInPage.PrintUnorderedParts();
+        signInPage.LogOut();
+    }
 }
