@@ -1,59 +1,51 @@
 package Helper;
 
-
 import org.openqa.selenium.By;
 
+/**
+ * Utility class to generate dynamic XPath locators using `?` placeholders.
+ * Each `?` in the XPath string will be replaced in order with the provided values.
+ */
 public class XPathHelper {
 
     /**
-     * Replaces placeholders in the given XPath template with provided values.
-     * @param xpathTemplate XPath string with placeholders (e.g., "//button[text()='{0}']")
-     * @param values Values to replace placeholders
-     * @return By locator with dynamic XPath
+     * Used for: Any dynamic XPath with one or more `?`
+     * XPath pattern example: "//div[@data-id='?']"
      */
     public static By getDynamicXPath(String xpathTemplate, String... values) {
-        for (int i = 0; i < values.length; i++) {
-            xpathTemplate = xpathTemplate.replace("{" + i + "}", values[i]);
+        for (String value : values) {
+            xpathTemplate = xpathTemplate.replaceFirst("\\?", java.util.regex.Matcher.quoteReplacement(value));
         }
         return By.xpath(xpathTemplate);
     }
 
     /**
-     * Get an element by visible text dynamically.
-     * @param xpathTemplate XPath template with a placeholder (e.g., "//button[text()='{0}']")
-     * @param text Visible text to replace in XPath
-     * @return By locator with dynamic XPath
+     * Used for: Matching exact visible text
+     * XPath pattern example: "//a[text()='?']"
      */
     public static By getElementByText(String xpathTemplate, String text) {
         return getDynamicXPath(xpathTemplate, text);
     }
 
     /**
-     * Get an element by partial attribute match dynamically.
-     * @param xpathTemplate XPath template with a placeholder (e.g., "//*[contains(@id, '{0}')]")
-     * @param partialValue Partial value to replace in XPath
-     * @return By locator with dynamic XPath
+     * Used for: Contains/@id or @class partial matching
+     * XPath pattern example: "//*[contains(@class, '?')]"
      */
     public static By getElementByPartialAttribute(String xpathTemplate, String partialValue) {
         return getDynamicXPath(xpathTemplate, partialValue);
     }
 
     /**
-     * Get an element from a list using index dynamically.
-     * @param xpathTemplate XPath template with an index placeholder (e.g., "(//li)[{0}]")
-     * @param index Index to replace in XPath
-     * @return By locator with dynamic XPath
+     * Used for: Select nth element from list
+     * XPath pattern example: "(//li[@class='option'])[?]"
      */
     public static By getElementByIndex(String xpathTemplate, int index) {
         return getDynamicXPath(xpathTemplate, String.valueOf(index));
     }
 
     /**
-     * Get a table cell dynamically by row and column index.
-     * @param xpathTemplate XPath template with row and column placeholders (e.g., "//table/tbody/tr[{0}]/td[{1}]")
-     * @param row Row index to replace in XPath
-     * @param col Column index to replace in XPath
-     * @return By locator with dynamic XPath
+     * Used for: Row/Col specific table access
+     * XPath pattern example: "//table/tbody/tr[?]/td[?]"
      */
     public static By getTableCell(String xpathTemplate, int row, int col) {
         return getDynamicXPath(xpathTemplate, String.valueOf(row), String.valueOf(col));
