@@ -15,33 +15,18 @@
 
 **Project Structure**
 
-Automation_Framework/
-├── src/
-│   ├── main/
-│   │   ├── java/                    # Main source code (if any)
-│   │   └── resources/               # Main resources (e.g., config files)
-│   └── test/
-│       ├── java/                    # Test source code
-│       │   ├── Base/                # Base classes (e.g., BaseTest.java, WebDriverBase.java)
-│       │   ├── Helper/              # Utility classes (e.g., RetryAnalyzer.java, WaitHelper.java)
-│       │   ├── Pages/               # Page object models (e.g., SignInPage.java)
-│       │   ├── ReportManager/       # Reporting utilities (e.g., ExtentManager.java)
-│       │   ├── SetUp/               # Setup classes (e.g., ConfigReader.java)
-│       │   └── Tests/               # Test cases (e.g., SignInTest.java)
-│       └── resources/               # Test resources
-│           ├── testng.xml           # TestNG suite configuration
-│           └── config.properties    # Test configuration (e.g., URLs, credentials)
-├── target/                          # Build output (ignored by .gitignore)
-│   ├── allure-results/              # Allure raw results
-│   ├── surefire-reports/            # Surefire reports (if any left)
-│   └── test-output/                 # Extent Reports output
-├── pom.xml                          # Maven configuration
-├── .gitignore                       # Git ignore file
+![image](https://github.com/user-attachments/assets/0517342c-a3f4-4114-a59a-2acbe5201348)
+
 
 **daily build trends and reports with allure on jenkins for monitoring :**
 
-![image](https://github.com/user-attachments/assets/caca3529-15df-464c-9996-3475f4759763)
+![image](https://github.com/user-attachments/assets/a84da931-dd11-429d-843f-78e21f9bbb3a)
+
+![image](https://github.com/user-attachments/assets/4529bb4e-02d6-4b75-af20-09b77815c3ca)
 
 
-![image](https://github.com/user-attachments/assets/1c96f50e-af4f-48e5-a04d-2905e1431249)
+Build Trends :
+![image](https://github.com/user-attachments/assets/444dbc5d-5a4b-4b00-83db-9ae638c7d413)
+
+
 
