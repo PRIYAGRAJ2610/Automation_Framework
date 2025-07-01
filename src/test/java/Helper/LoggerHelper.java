@@ -36,6 +36,19 @@ public class LoggerHelper {
         Allure.addAttachment("Info Log", new ByteArrayInputStream(message.getBytes()));
     }
 
+    public static void logWarn(String message) {
+        Logger logger = getLogger(LoggerHelper.class);
+        logger.warn(message);
+
+        ExtentTest test = getExtentTest();
+        if (test != null) {
+            test.log(Status.WARNING, message);
+        }
+
+        Allure.addAttachment("Warning Log", new ByteArrayInputStream(message.getBytes()));
+    }
+
+
     public static void logError(String message, Throwable t) {
         Logger logger = getLogger(LoggerHelper.class);
         logger.error(message, t);

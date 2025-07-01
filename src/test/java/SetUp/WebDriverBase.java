@@ -1,22 +1,21 @@
 package SetUp;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class WebDriverBase {
-    private static WebDriver driver;
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     public static void initializeWebDriver() {
-        if (driver != null) return;
+        if (driver.get() != null) return;
 
         String browser = System.getProperty("browser", ConfigReader.getProperty("browser")).toLowerCase();
         boolean isCI = System.getenv("CI") != null || System.getenv("JENKINS_HOME") != null;
@@ -42,17 +41,15 @@ public class WebDriverBase {
                 chromeOptions.addArguments("--disable-dev-shm-usage");
                 chromeOptions.addArguments("--incognito");
 
-                // Avoid automation detection
-                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-                chromeOptions.setExperimentalOption("useAutomationExtension", false);
-
-                // Disable Chrome's credential service and password manager
                 Map<String, Object> chromePrefs = new HashMap<>();
                 chromePrefs.put("credentials_enable_service", false);
                 chromePrefs.put("profile.password_manager_enabled", false);
                 chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
-                driver = new ChromeDriver(chromeOptions);
+                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
+
+                driver.set(new ChromeDriver(chromeOptions));
                 break;
 
             case "firefox":
@@ -62,8 +59,7 @@ public class WebDriverBase {
                     firefoxOptions.addArguments("--headless");
                     firefoxOptions.addArguments("--window-size=1920,1080");
                 }
-                firefoxOptions.addArguments("--disable-popup-blocking");
-                driver = new FirefoxDriver(firefoxOptions);
+                driver.set(new FirefoxDriver(firefoxOptions));
                 break;
 
             case "edge":
@@ -73,8 +69,7 @@ public class WebDriverBase {
                     edgeOptions.addArguments("--headless");
                     edgeOptions.addArguments("--window-size=1920,1080");
                 }
-                edgeOptions.addArguments("--disable-notifications");
-                driver = new EdgeDriver(edgeOptions);
+                driver.set(new EdgeDriver(edgeOptions));
                 break;
 
             default:
@@ -83,16 +78,16 @@ public class WebDriverBase {
     }
 
     public static WebDriver getWebDriver() {
-        if (driver == null) {
+        if (driver.get() == null) {
             initializeWebDriver();
         }
-        return driver;
+        return driver.get();
     }
 
     public static void quitWebDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
+        if (driver.get() != null) {
+            driver.get().quit();
+            driver.remove();
         }
     }
 }
