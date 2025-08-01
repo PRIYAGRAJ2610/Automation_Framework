@@ -1,9 +1,9 @@
-name: Daily Selenium Tests
+name: Daily Selenium Tests with Allure Report
 
 on:
   schedule:
-    - cron: '0 5 * * *'
-  workflow_dispatch:
+    - cron: '0 5 * * *'  # Runs daily at 5 AM UTC
+  workflow_dispatch:      # Allows manual triggering
 
 permissions:
   contents: read
@@ -35,14 +35,14 @@ jobs:
         mvn io.qameta.allure:allure-maven:2.11.2:report
         mv target/site/allure-maven-plugin/ allure-report
 
-    - name: Setup Pages
+    - name: Configure GitHub Pages
       uses: actions/configure-pages@v4
 
-    - name: Upload GitHub Pages artifact
+    - name: Upload Allure Report to Pages
       uses: actions/upload-pages-artifact@v2
       with:
         path: allure-report
 
     - name: Deploy to GitHub Pages
-      id: deployment
       uses: actions/deploy-pages@v2
+      id: deployment
