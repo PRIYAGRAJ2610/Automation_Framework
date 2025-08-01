@@ -2,8 +2,13 @@ name: Daily Selenium Tests
 
 on:
   schedule:
-    - cron: '0 5 * * *'    # Daily at 5 AM UTC
+    - cron: '0 5 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -19,11 +24,25 @@ jobs:
         distribution: 'temurin'
         java-version: '18'
 
-    - name: Debug Java Version
-      run: java -version
-
     - name: Set up Chrome
       uses: browser-actions/setup-chrome@v1
 
-    - name: Run Selenium Tests
+    - name: Run Tests with Allure
       run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
+
+    - name: Generate Allure Report
+      run: |
+        mvn io.qameta.allure:allure-maven:2.11.2:report
+        mv target/site/allure-maven-plugin/ allure-report
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: allure-report
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
