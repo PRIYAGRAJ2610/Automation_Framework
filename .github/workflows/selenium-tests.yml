@@ -1,0 +1,29 @@
+name: Daily Selenium Tests
+
+on:
+  schedule:
+    - cron: '0 5 * * *'    # Runs daily at 5 AM UTC
+  workflow_dispatch:        # Allows manual triggering
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'  # Change if needed
+
+    - name: Set up Chrome
+      uses: browser-actions/setup-chrome@v1
+
+    - name: Check Chrome Version
+      run: chrome --version
+
+    - name: Run Selenium Tests
+      run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
